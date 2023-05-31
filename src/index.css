@@ -1,0 +1,22 @@
+*,
+*::before,
+*::after {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+}
+
+:root {
+  --background-color: #ffffff;
+  --font-color: black;
+}
+
+html {
+	font-size: 62.5%;
+	background-color: var(--background-color);
+}
+body {
+	font-family: 'Roboto', sans-serif;
+	font-size: 1.6rem;
+  color: var(--font-color);
+}
