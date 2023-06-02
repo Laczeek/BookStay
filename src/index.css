@@ -7,16 +7,22 @@
 }
 
 :root {
-  --background-color: #ffffff;
-  --font-color: black;
+	--background-color: #ffffff;
+	--font-color: black;
+	--nav-color: #ffffff;
+	--active-link: #fff;
 }
 
 html {
-	font-size: 62.5%;
+	font-size: 16px;
 	background-color: var(--background-color);
 }
 body {
 	font-family: 'Roboto', sans-serif;
+	font-size: 1rem;
+	color: var(--font-color);
+}
+
+header {
 	font-size: 1.6rem;
-  color: var(--font-color);
 }
