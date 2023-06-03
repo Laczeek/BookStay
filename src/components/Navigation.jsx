@@ -39,7 +39,7 @@ const Navigation = () => {
 	};
 
 	return (
-		<AppBar position='fixed' sx={{ backgroundColor: 'var(--nav-color)' }}>
+		<AppBar position='sticky' sx={{ backgroundColor: 'var(--nav-color)', mb: 3 }}>
 			<Container maxWidth='xl'>
 				<Toolbar disableGutters>
 					<Typography
@@ -63,7 +63,7 @@ const Navigation = () => {
 								component={NavLink}
 								to={page === 'Home' ? `/` : `/${page.toLowerCase().replace(' ', '-')}`}
 								sx={{
-									my: 2,
+									my: 1,
 									mr: 2,
 									color: 'var(--font-color)',
 									display: 'block',

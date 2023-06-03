@@ -5,9 +5,8 @@ import Navigation from '../components/Navigation';
 const RootLayout = () => {
 	return (
 		<>
-			<header>
-				<Navigation />
-			</header>
+			<Navigation />
+
 			<main>
 				<Outlet />
 			</main>

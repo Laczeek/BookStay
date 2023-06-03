@@ -11,9 +11,15 @@
 	--font-color: black;
 	--nav-color: #ffffff;
 	--active-link: #fff;
+	--card-color: #ffffff;
+	--element-primary: black;
+	--card-element-font: #fff;
+	--pagination-background: black;
 }
 
 html {
+	position: relative;
+	min-height: 100vh;
 	font-size: 16px;
 	background-color: var(--background-color);
 }
@@ -22,6 +28,7 @@ body {
 	font-size: 1rem;
 	color: var(--font-color);
 }
+
 
 header {
 	font-size: 1.6rem;
