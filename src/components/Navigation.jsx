@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 
 import Container from '@mui/material/Container';
@@ -14,7 +14,8 @@ import Tooltip from '@mui/material/Tooltip';
 import Avatar from '@mui/material/Avatar';
 import MenuIcon from '@mui/icons-material/Menu';
 
-import SwitchThemeButton from '../ui/SwitchThemeButton';
+import { MaterialUISwitch } from '../ui/SwitchThemeButton';
+import { ColorModeContext } from '../context/ThemeProvider';
 
 const PAGES = ['Home', 'Sign up', 'Login'];
 const SETTINGS = ['My Profile', 'My Hotels', 'Logout'];
@@ -22,6 +23,8 @@ const SETTINGS = ['My Profile', 'My Hotels', 'Logout'];
 const Navigation = () => {
 	const [anchorElUser, setAnchorElUser] = useState(null);
 	const [anchorElNav, setAnchorElNav] = useState(null);
+
+	const { toggleColorMode } = useContext(ColorModeContext);
 
 	const handleShowNav = event => {
 		setAnchorElNav(event.currentTarget);
@@ -39,7 +42,7 @@ const Navigation = () => {
 	};
 
 	return (
-		<AppBar position='sticky' sx={{ backgroundColor: 'var(--nav-color)', mb: 3 }}>
+		<AppBar position='sticky' sx={{ mb: 3, transition: 'background-color 0.3s' }} color='inherit'>
 			<Container maxWidth='xl'>
 				<Toolbar disableGutters>
 					<Typography
@@ -51,7 +54,7 @@ const Navigation = () => {
 							mr: 5,
 							display: { xs: 'none', sm: 'flex' },
 							fontWeight: 700,
-							color: 'var(--font-color)',
+							color: 'inherit',
 							textDecoration: 'none',
 						}}>
 						BookStay
@@ -65,11 +68,11 @@ const Navigation = () => {
 								sx={{
 									my: 1,
 									mr: 2,
-									color: 'var(--font-color)',
+									color: 'inherit',
 									display: 'block',
 									'&.active': {
-										backgroundColor: 'var(--font-color)',
-										color: 'var(--active-link)',
+										bgcolor: 'ButtonShadow',
+										color: 'ButtonText',
 									},
 								}}>
 								{page}
@@ -85,7 +88,7 @@ const Navigation = () => {
 							aria-haspopup='true'
 							color='inherit'
 							onClick={handleShowNav}>
-							<MenuIcon sx={{ color: 'var(--font-color)' }} />
+							<MenuIcon color='inherit' />
 						</IconButton>
 						<Menu
 							id='menu-appbar'
@@ -112,11 +115,11 @@ const Navigation = () => {
 										to={page === 'Home' ? `/` : `/${page.toLowerCase().replace(' ', '-')}`}
 										sx={{
 											my: 2,
-											color: 'var(--font-color)',
+											color: 'inherit',
 											display: 'block',
 											'&.active': {
-												backgroundColor: 'var(--font-color)',
-												color: 'var(--active-link)',
+												bgcolor: 'ButtonShadow',
+												color: 'ButtonText',
 											},
 										}}>
 										{page}
@@ -130,19 +133,19 @@ const Navigation = () => {
 						variant='h5'
 						noWrap
 						component={Link}
+						color='inherit'
 						to='/'
 						sx={{
 							mr: 2,
 							flexGrow: 1,
 							display: { xs: 'flex', sm: 'none' },
 							fontWeight: 700,
-							color: 'var(--font-color)',
 							textDecoration: 'none',
 						}}>
 						BookStay
 					</Typography>
 
-					<SwitchThemeButton/>
+					<MaterialUISwitch sx={{ mr: 2 }} onChange={toggleColorMode} />
 
 					<Box sx={{ flexGrow: 0 }}>
 						<Tooltip title='Open settings'>
@@ -167,7 +170,18 @@ const Navigation = () => {
 							onClose={handleCloseUserMenu}>
 							{SETTINGS.map(setting => (
 								<MenuItem key={setting} onClick={handleCloseUserMenu}>
-									<Typography textAlign='center'>{setting}</Typography>
+									<Button
+										color='inherit'
+										component={NavLink}
+										sx={{
+											'&.active': {
+												bgcolor: 'ButtonShadow',
+												color: 'ButtonText',
+											},
+										}}
+										to={`/${setting.toLocaleLowerCase().replace(' ', '-')}`}>
+										{setting}
+									</Button>
 								</MenuItem>
 							))}
 						</Menu>

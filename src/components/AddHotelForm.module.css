@@ -1,0 +1,36 @@
+.box {
+    display: flex;
+    flex-direction: column;
+}
+
+.form input, textarea {
+    font-size: 1rem;
+    padding: 0.3em 0.6em;
+    outline: none;
+    background-color: var(--card-color);
+    color: var(--font-color);
+    border: 2px solid  rgb(175, 175, 175);
+    border-radius: 5px;
+}
+.form input:focus, textarea:focus {
+    border: 2px solid var(--element-primary);
+}
+
+
+.form label {
+    margin-bottom: 0.3em;
+    margin-left: 0.3em;
+}
+.form p {
+    font-size: 1.4rem;
+}
+.form textarea {
+    resize: vertical;
+    max-height: 400px;
+}
+
+.form span {
+    margin-top: 0.5em;
+    font-size: 0.8rem;
+    color: tomato;
+}
