@@ -1,8 +1,9 @@
-import { Link } from 'react-router-dom';
+import { Link, useRouteLoaderData, useNavigation, useSubmit } from 'react-router-dom';
 
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import Grid from '@mui/material/Grid';
@@ -10,6 +11,18 @@ import Grid from '@mui/material/Grid';
 import RoomCard from './RoomCard';
 
 const HotelDetails = props => {
+	const token = useRouteLoaderData('root');
+	const navigation = useNavigation();
+	const submit = useSubmit();
+	const isSubmitting = navigation.state === 'submitting';
+
+	const deleteHotelHandler = () => {
+		const proceded = window.confirm('Are you sure?');
+		if (proceded) {
+			submit({ serialized: JSON.stringify(props.id) }, { method: 'DELETE' });
+		}
+	};
+
 	return (
 		<>
 			<Button variant='outlined' color='inherit' component={Link} to='/'>
@@ -53,11 +66,11 @@ const HotelDetails = props => {
 				</Box>
 
 				<Box
-					bgcolor='ActiveBorder'
-					color='InfoBackground'
+					bgcolor='ButtonFace'
+					color='ButtonText'
 					sx={{ py: 1, px: 2, borderRadius: 1, width: 'fit-content' }}
 					mb={3}>
-					<Typography >{props.ratings}</Typography>
+					<Typography>{props.ratings}</Typography>
 				</Box>
 
 				<Typography>{props.description}</Typography>
@@ -70,7 +83,7 @@ const HotelDetails = props => {
 						{props.amenities &&
 							props.amenities.map(amenity => (
 								<Grid item xs={6} key={amenity}>
-									* {amenity}
+									✔︎ {amenity}
 								</Grid>
 							))}
 					</Grid>
@@ -83,7 +96,7 @@ const HotelDetails = props => {
 						{props.area &&
 							props.area.map(amenity => (
 								<Grid item xs={6} key={amenity}>
-									* {amenity}
+									✔︎ {amenity}
 								</Grid>
 							))}
 					</Grid>
@@ -100,6 +113,18 @@ const HotelDetails = props => {
 					})}
 				</Grid>
 			</Box>
+			{token && token.userId === props.userId && (
+				<LoadingButton
+					sx={{ mt: 2, ml: 'auto', bgcolor: 'tomato' }}
+					color='inherit'
+					type='submit'
+					loading={isSubmitting}
+					loadingIndicator={'Removing…'}
+					variant='contained'
+					onClick={deleteHotelHandler}>
+					<span>Remove hotel</span>
+				</LoadingButton>
+			)}
 		</>
 	);
 };

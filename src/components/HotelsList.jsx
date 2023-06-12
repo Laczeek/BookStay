@@ -8,7 +8,6 @@ import Hotel from './Hotel';
 
 const HotelsList = ({hotels}) => {
 	const [currentPage, setCurrentPage] = useState(1);
-
 	const itemsPerPage = 9;
 
 	const handlePageChange = (event, page) => {
@@ -24,7 +23,7 @@ const HotelsList = ({hotels}) => {
 		<>
 			<Grid container spacing={3}>
 				{hotelsToShow.map(hotel => (
-					<Grid item xs={12} sm={6} lg={4} key={hotel.name}>
+					<Grid item xs={12} sm={6} lg={4} key={hotel.id}>
 						<Hotel
 							id={hotel.id}
 							name={hotel.name}

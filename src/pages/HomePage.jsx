@@ -18,12 +18,6 @@ export default HomePage;
 
 const fetchHotels = async () => {
 	try {
-		await  new Promise((resolve, reject) => {
-			setTimeout(() => {
-			  resolve("foo");
-			}, 2000);
-		  });
-
 		const res = await fetch('https://bookstay-48264-default-rtdb.firebaseio.com/hotels.json');
 
 		if (!res.ok) {

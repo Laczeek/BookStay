@@ -7,8 +7,9 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
 const Hotel = props => {
+	
 	return (
-		<Link to={`hotel/${props.id}`} style={{ textDecoration: 'none' }}>
+		<Link to={`/hotel/${props.id}`} style={{ textDecoration: 'none' }}>
 			<Card color='inherit' sx={{ transition: 'background-color 0.3s' }}>
 				<CardMedia component='img' alt='Hotel photo' height={244} image={props.image} />
 
@@ -25,7 +26,7 @@ const Hotel = props => {
 						</Typography>
 					</Box>
 					<Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-						<Box sx={{ py: 1, px: 2, borderRadius: 1 }} bgcolor='ActiveBorder' color='InfoBackground'>
+						<Box sx={{ py: 1, px: 2, borderRadius: 1 }} bgcolor='ButtonFace' color='ButtonText'>
 							<Typography>{props.ratings}</Typography>
 						</Box>
 						<Typography variant='h5'>

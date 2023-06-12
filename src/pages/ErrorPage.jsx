@@ -10,14 +10,13 @@ const ErrorPage = () => {
     let title = 'An error occured'
 	let message = 'Something went wrong...';
 
-    if (error.status === 404) {
+    if (error && error.status === 404) {
         title = 'Not found!';
         message = 'Could not find resource or page.';
       }
-	if (error.status === 500) {
-		message = error.message
+	if (error && error.status === 500 && error.data && error.data.message) {
+		message = error.data.message
 	}
-
 
 	return (
 		<>

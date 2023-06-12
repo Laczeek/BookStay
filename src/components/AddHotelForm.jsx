@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useSubmit } from 'react-router-dom';
+import { useSubmit, useNavigation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
 import Grid from '@mui/material/Grid';
@@ -7,7 +7,11 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import { FormControl, FormLabel, Checkbox, FormGroup } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import Checkbox from '@mui/material/Checkbox';
+import FormGroup from '@mui/material/FormGroup';
 
 import RoomForm from './RoomForm';
 import ModalForm from '../ui/Modal';
@@ -15,6 +19,9 @@ import ModalForm from '../ui/Modal';
 const AddHotelForm = () => {
 	const [rooms, setRooms] = useState([]);
 	const [showModal, setShowModal] = useState(false);
+
+	const navigation = useNavigation();
+	const isSubmitting = navigation.state === 'submitting';
 
 	const submit = useSubmit();
 
@@ -196,9 +203,14 @@ const AddHotelForm = () => {
 				</Box>
 
 				{rooms && rooms.length > 0 && (
-					<Button variant='contained' color='inherit' type='submit'>
-						Add hotel
-					</Button>
+					<LoadingButton
+						color='inherit'
+						type='submit'
+						loading={isSubmitting}
+						loadingIndicator='Submitting…'
+						variant='contained'>
+						<span>Add hotel</span>
+					</LoadingButton>
 				)}
 			</form>
 		</>

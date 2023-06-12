@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useRouteLoaderData, Form } from 'react-router-dom';
 
 import Container from '@mui/material/Container';
 import AppBar from '@mui/material/AppBar';
@@ -18,9 +18,11 @@ import { MaterialUISwitch } from '../ui/SwitchThemeButton';
 import { ColorModeContext } from '../context/ThemeProvider';
 
 const PAGES = ['Home', 'Sign up', 'Login'];
-const SETTINGS = ['My Profile', 'My Hotels', 'Logout'];
+const SETTINGS = ['My Profile', 'My Hotels'];
 
 const Navigation = () => {
+	const token = useRouteLoaderData('root');
+
 	const [anchorElUser, setAnchorElUser] = useState(null);
 	const [anchorElNav, setAnchorElNav] = useState(null);
 
@@ -60,24 +62,36 @@ const Navigation = () => {
 						BookStay
 					</Typography>
 					<Box sx={{ flexGrow: 1, display: { xs: 'none', sm: 'flex' } }}>
-						{PAGES.map(page => (
-							<Button
-								key={page}
-								component={NavLink}
-								to={page === 'Home' ? `/` : `/${page.toLowerCase().replace(' ', '-')}`}
-								sx={{
-									my: 1,
-									mr: 2,
-									color: 'inherit',
-									display: 'block',
-									'&.active': {
-										bgcolor: 'ButtonShadow',
-										color: 'ButtonText',
-									},
-								}}>
-								{page}
-							</Button>
-						))}
+						{PAGES.map(page => {
+							if ((token && page === 'Sign up') || (token && page === 'Login')) {
+								return null;
+							} else {
+								return (
+									<Button
+										key={page}
+										component={NavLink}
+										to={
+											page === 'Home'
+												? `/`
+												: page === 'Sign up'
+												? '/authentication?mode=sign-up'
+												: '/authentication?mode=login'
+										}
+										sx={{
+											my: 1,
+											mr: 2,
+											color: 'inherit',
+											display: 'block',
+											'&.active': {
+												bgcolor: 'ButtonShadow',
+												color: 'ButtonText',
+											},
+										}}>
+										{page}
+									</Button>
+								);
+							}
+						})}
 					</Box>
 
 					<Box sx={{ flexGrow: 1, display: { xs: 'flex', sm: 'none' } }}>
@@ -107,25 +121,36 @@ const Navigation = () => {
 								display: { xs: 'block', md: 'none' },
 							}}
 							onClose={handleCloseNav}>
-							{PAGES.map(page => (
-								<MenuItem key={page} onClick={handleCloseNav}>
-									<Button
-										key={page}
-										component={NavLink}
-										to={page === 'Home' ? `/` : `/${page.toLowerCase().replace(' ', '-')}`}
-										sx={{
-											my: 2,
-											color: 'inherit',
-											display: 'block',
-											'&.active': {
-												bgcolor: 'ButtonShadow',
-												color: 'ButtonText',
-											},
-										}}>
-										{page}
-									</Button>
-								</MenuItem>
-							))}
+							{PAGES.map(page => {
+								if ((token && page === 'Sign up') || (token && page === 'Login')) {
+									return null;
+								} else {
+									return <MenuItem key={page} onClick={handleCloseNav}>
+										<Button
+											key={page}
+											component={NavLink}
+											to={
+												page === 'Home'
+													? `/`
+													: page === 'Sign up'
+													? '/authentication?mode=sign-up'
+													: '/authentication?mode=login'
+											}
+											sx={{
+												my: 1,
+												mr: 2,
+												color: 'inherit',
+												display: 'block',
+												'&.active': {
+													bgcolor: 'ButtonShadow',
+													color: 'ButtonText',
+												},
+											}}>
+											{page}
+										</Button>
+									</MenuItem>;
+								}
+							})}
 						</Menu>
 					</Box>
 
@@ -147,45 +172,54 @@ const Navigation = () => {
 
 					<MaterialUISwitch sx={{ mr: 2 }} onChange={toggleColorMode} />
 
-					<Box sx={{ flexGrow: 0 }}>
-						<Tooltip title='Open settings'>
-							<IconButton sx={{ p: 0 }} onClick={handleShowUserMenu}>
-								<Avatar alt='User' />
-							</IconButton>
-						</Tooltip>
-						<Menu
-							sx={{ mt: '45px' }}
-							id='menu-appbar'
-							anchorEl={anchorElUser}
-							anchorOrigin={{
-								vertical: 'top',
-								horizontal: 'right',
-							}}
-							keepMounted
-							transformOrigin={{
-								vertical: 'top',
-								horizontal: 'right',
-							}}
-							open={Boolean(anchorElUser)}
-							onClose={handleCloseUserMenu}>
-							{SETTINGS.map(setting => (
-								<MenuItem key={setting} onClick={handleCloseUserMenu}>
-									<Button
-										color='inherit'
-										component={NavLink}
-										sx={{
-											'&.active': {
-												bgcolor: 'ButtonShadow',
-												color: 'ButtonText',
-											},
-										}}
-										to={`/${setting.toLocaleLowerCase().replace(' ', '-')}`}>
-										{setting}
-									</Button>
+					{token && (
+						<Box sx={{ flexGrow: 0 }}>
+							<Tooltip title='Open settings'>
+								<IconButton sx={{ p: 0 }} onClick={handleShowUserMenu}>
+									<Avatar alt='User' src={token.photoURL}/>
+								</IconButton>
+							</Tooltip>
+							<Menu
+								sx={{ mt: '45px' }}
+								id='menu-appbar'
+								anchorEl={anchorElUser}
+								anchorOrigin={{
+									vertical: 'top',
+									horizontal: 'right',
+								}}
+								keepMounted
+								transformOrigin={{
+									vertical: 'top',
+									horizontal: 'right',
+								}}
+								open={Boolean(anchorElUser)}
+								onClose={handleCloseUserMenu}>
+								{SETTINGS.map(setting => (
+									<MenuItem key={setting} onClick={handleCloseUserMenu}>
+										<Button
+											color='inherit'
+											component={NavLink}
+											sx={{
+												'&.active': {
+													bgcolor: 'ButtonShadow',
+													color: 'ButtonText',
+												},
+											}}
+											to={`/${setting.toLocaleLowerCase().replace(' ', '-')}`}>
+											{setting}
+										</Button>
+									</MenuItem>
+								))}
+								<MenuItem onClick={handleCloseUserMenu}>
+									<Form action='logout' method='post'>
+										<Button color='inherit' type='submit'>
+											logout
+										</Button>
+									</Form>
 								</MenuItem>
-							))}
-						</Menu>
-					</Box>
+							</Menu>
+						</Box>
+					)}
 				</Toolbar>
 			</Container>
 		</AppBar>
