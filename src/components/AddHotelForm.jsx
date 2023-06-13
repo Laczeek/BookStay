@@ -53,7 +53,7 @@ const AddHotelForm = () => {
 
 	return (
 		<>
-			<ModalForm open={showModal} onClose={toggleModal} modalWidth='300px'>
+			<ModalForm open={showModal} onClose={toggleModal} modalWidth='400px'>
 				<RoomForm addRoom={addRoom} onClose={toggleModal} />
 			</ModalForm>
 

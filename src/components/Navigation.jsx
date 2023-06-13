@@ -16,6 +16,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 import { MaterialUISwitch } from '../ui/SwitchThemeButton';
 import { ColorModeContext } from '../context/ThemeProvider';
+import { ImageContext } from '../context/ImageProvider';
 
 const PAGES = ['Home', 'Sign up', 'Login'];
 const SETTINGS = ['My Profile', 'My Hotels'];
@@ -27,6 +28,7 @@ const Navigation = () => {
 	const [anchorElNav, setAnchorElNav] = useState(null);
 
 	const { toggleColorMode } = useContext(ColorModeContext);
+	const { imageFile } = useContext(ImageContext);
 
 	const handleShowNav = event => {
 		setAnchorElNav(event.currentTarget);
@@ -125,30 +127,32 @@ const Navigation = () => {
 								if ((token && page === 'Sign up') || (token && page === 'Login')) {
 									return null;
 								} else {
-									return <MenuItem key={page} onClick={handleCloseNav}>
-										<Button
-											key={page}
-											component={NavLink}
-											to={
-												page === 'Home'
-													? `/`
-													: page === 'Sign up'
-													? '/authentication?mode=sign-up'
-													: '/authentication?mode=login'
-											}
-											sx={{
-												my: 1,
-												mr: 2,
-												color: 'inherit',
-												display: 'block',
-												'&.active': {
-													bgcolor: 'ButtonShadow',
-													color: 'ButtonText',
-												},
-											}}>
-											{page}
-										</Button>
-									</MenuItem>;
+									return (
+										<MenuItem key={page} onClick={handleCloseNav}>
+											<Button
+												key={page}
+												component={NavLink}
+												to={
+													page === 'Home'
+														? `/`
+														: page === 'Sign up'
+														? '/authentication?mode=sign-up'
+														: '/authentication?mode=login'
+												}
+												sx={{
+													my: 1,
+													mr: 2,
+													color: 'inherit',
+													display: 'block',
+													'&.active': {
+														bgcolor: 'ButtonShadow',
+														color: 'ButtonText',
+													},
+												}}>
+												{page}
+											</Button>
+										</MenuItem>
+									);
 								}
 							})}
 						</Menu>
@@ -176,7 +180,7 @@ const Navigation = () => {
 						<Box sx={{ flexGrow: 0 }}>
 							<Tooltip title='Open settings'>
 								<IconButton sx={{ p: 0 }} onClick={handleShowUserMenu}>
-									<Avatar alt='User' src={token.photoURL}/>
+									<Avatar alt='User' src={imageFile ? imageFile : token.photoURL} />
 								</IconButton>
 							</Tooltip>
 							<Menu

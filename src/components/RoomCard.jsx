@@ -8,9 +8,10 @@ import CardMedia from '@mui/material/CardMedia';
 import Carousel from 'react-material-ui-carousel';
 import Button from '@mui/material/Button';
 
-const RoomCard = ({ room, onOpen }) => {
-	const token = useRouteLoaderData('root');
 
+const RoomCard = ({ room, onClick}) => {
+	const token = useRouteLoaderData('root');
+	
 	return (
 		<Card sx={{ maxWidth: '100%', mb: 2 }}>
 			<Carousel>
@@ -42,7 +43,7 @@ const RoomCard = ({ room, onOpen }) => {
 						sx={{
 							mt: 2,
 						}}
-						onClick={onOpen}>
+						onClick={() => onClick(room)}>
 						Reserve
 					</Button>
 				)}

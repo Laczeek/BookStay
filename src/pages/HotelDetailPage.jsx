@@ -43,27 +43,47 @@ export const loader = ({ params }) => {
 
 export const action = async ({ request }) => {
 	const formData = await request.formData();
-	const hotelId = formData.get('serialized');
+
+	const formId = formData.get('formId');
+	const data = formData.get('serialized');
 
 	const token = getUserToken();
 
 	try {
-		const res = await fetch(
-			`https://bookstay-48264-default-rtdb.firebaseio.com/hotels/${JSON.parse(hotelId)}.json?auth=${token.accessToken}`,
-			{
-				method: request.method,
-				headers: {
-					'Content-Type': 'application/json',
-				},
+		if (formId === 'deleteHotel') {
+			const res = await fetch(
+				`https://bookstay-48264-default-rtdb.firebaseio.com/hotels/${JSON.parse(data)}.json?auth=${token.accessToken}`,
+				{
+					method: request.method,
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				}
+			);
+
+			if (!res.ok) {
+				throw json({ message: "Can't delete this hotel!!!" }, { status: 500 });
 			}
-		);
+			return redirect('/my-hotels');
+		} else if (formId === 'reservation') {
+			const res = await fetch(
+				`https://bookstay-48264-default-rtdb.firebaseio.com/reservations.json?auth=${token.accessToken}`,
+				{
+					method: request.method,
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: data,
+				}
+			);
 
-		if (!res.ok) {
-			throw json({ message: "Can't delete this hotel!!!" }, { status: 500 });
+			if (!res.ok) {
+				throw json({ message: "Can't make reservation!!!" }, { status: 500 });
+			}
+			return redirect('/my-profile');
 		}
-
-		return redirect('/my-hotels');
 	} catch (error) {
-		throw json({ message: "Can't delete this hotel!!!" }, { status: 500 });
+		console.log(error);
+		throw json({ message: "Can't perform the action!!!" }, { status: 500 });
 	}
 };
