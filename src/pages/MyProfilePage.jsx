@@ -9,8 +9,8 @@ import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 
-import LoadingSpinner from '../ui/LoadingSpinner';
 import { ImageContext } from '../context/ImageProvider';
+import LoadingSpinner from '../ui/LoadingSpinner';
 import TableProfile from '../components/TableProfile';
 import { getUserToken } from '../helpers/AuthUser';
 
@@ -34,48 +34,48 @@ const MyProfilePage = () => {
 	};
 
 	return (
-		<Suspense fallback={<LoadingSpinner />}>
-			<Await resolve={reservations}>
-				{resolvedReservations => (
-					<>
-						<Typography variant='h5'>
-							Your email: <span style={{ fontWeight: '500' }}>{token.email}</span>
-						</Typography>
-						<Box display='flex' alignItems={'center'} gap={1} mt={4} maxWidth={'400px'}>
-							<Avatar
-								sx={{ width: '60px', height: '60px' }}
-								src={imageContext.imageFile ? imageContext.imageFile : token.photoURL}
-							/>
-							<form onSubmit={onSubmit}>
-								<FormControl>
-									<FormLabel>Change your avatar.</FormLabel>
-									<TextField type='file' size='small' inputRef={imageRef} />
-								</FormControl>
-								<LoadingButton
-									color='inherit'
-									type='submit'
-									variant='contained'
-									size='small'
-									sx={{ marginTop: '0.5em' }}>
-									<span>Change avatar</span>
-								</LoadingButton>
-							</form>
-						</Box>
-						{resolvedReservations && resolvedReservations.length > 0 && <TableProfile reservations={resolvedReservations} />}
-					</>
-				)}
-			</Await>
-		</Suspense>
+		<>
+			<Typography variant='h5'>
+				Your email: <span style={{ fontWeight: '500' }}>{token.email}</span>
+			</Typography>
+			<Box display='flex' alignItems={'center'} gap={1} mt={4} maxWidth={'400px'}>
+				<Avatar
+					sx={{ width: '60px', height: '60px' }}
+					src={imageContext.imageFile ? imageContext.imageFile : token.photoURL}
+				/>
+				<form onSubmit={onSubmit}>
+					<FormControl>
+						<FormLabel>Change your avatar.</FormLabel>
+						<TextField type='file' size='small' inputRef={imageRef} />
+					</FormControl>
+					<LoadingButton color='inherit' type='submit' variant='contained' size='small' sx={{ marginTop: '0.5em' }}>
+						<span>Change avatar</span>
+					</LoadingButton>
+				</form>
+			</Box>
+
+			
+			<Suspense fallback={<LoadingSpinner />}>
+				<Await resolve={reservations}>
+					{resolvedReservations => (
+						<>
+							{resolvedReservations && resolvedReservations.length > 0 ? (
+								<TableProfile reservations={resolvedReservations} /> 
+							) : <Typography mt={6} variant='h5' textAlign={'center'}>You haven't made any reservations yet...</Typography>}
+						</>
+					)}
+				</Await>
+			</Suspense>
+		</>
 	);
 };
 
 export default MyProfilePage;
 
-export const fetchReservations = async (token) => {
-
+export const fetchReservations = async token => {
 	try {
 		const res = await fetch(
-			`https://bookstay-48264-default-rtdb.firebaseio.com/reservations.json?orderBy="bookerId"&equalTo="${token.userId}"`
+			`${import.meta.env.VITE_APP_DATABASE_URL}/reservations.json?orderBy="bookerId"&equalTo="${token.userId}"`
 		);
 
 		if (!res.ok) {

@@ -64,7 +64,6 @@ export const action = async ({ request }) => {
 		return redirect('/');
 	} catch (error) {
 		const errorCode = error.code;
-
 		return {errorCode}
 	}
 };

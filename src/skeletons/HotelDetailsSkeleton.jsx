@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -6,19 +6,13 @@ import Skeleton from '@mui/material/Skeleton';
 import Button from '@mui/material/Button';
 
 const HotelDetailsSkeleton = () => {
+	const navigate = useNavigate();
 	return (
 		<>
 			<Button
 				variant='outlined'
-				sx={{
-					borderColor: 'var(--element-primary)',
-					color: 'var(--font-color)',
-					'&:hover': {
-						borderColor: 'var(--primary-hover)',
-					},
-				}}
-				component={Link}
-				to='/'>
+				color='inherit'
+				onClick={() => navigate(-1)}>
 				Go back
 			</Button>
 
@@ -27,7 +21,7 @@ const HotelDetailsSkeleton = () => {
 			</Box>
 
 			<Box>
-				<Skeleton variant='h5' />
+				<Skeleton variant='h5'/>
 				<Box my={2}>
 					<Skeleton variant='text' sx={{ fontSize: '1rem' }} />
 				</Box>
@@ -37,32 +31,30 @@ const HotelDetailsSkeleton = () => {
 			<Skeleton variant='text' sx={{ fontSize: '1rem' }} />
 
 			<Box my={4}>
-                <Grid container spacing={2}>
-                    {[...Array(6)]?.map((item, index) => (
-                        <Grid key={index} item xs={6}>
-                            <Skeleton variant='text' sx={{ fontSize: '1rem' }} />
-                        </Grid>
-                    ))}
-                </Grid>
+				<Grid container spacing={2}>
+					{[...Array(6)]?.map((item, index) => (
+						<Grid key={index} item xs={6}>
+							<Skeleton variant='text' sx={{ fontSize: '1rem' }} />
+						</Grid>
+					))}
+				</Grid>
 			</Box>
-			<Box >
-                <Grid container spacing={2}>
-                    {[...Array(6)]?.map((item, index) => (
-                        <Grid key={index} item xs={6}>
-                            <Skeleton variant='text' sx={{ fontSize: '1rem' }} />
-                        </Grid>
-                    ))}
-                </Grid>
+			<Box>
+				<Grid container spacing={2}>
+					{[...Array(6)]?.map((item, index) => (
+						<Grid key={index} item xs={6}>
+							<Skeleton variant='text' sx={{ fontSize: '1rem' }} />
+						</Grid>
+					))}
+				</Grid>
 			</Box>
-            <Grid container spacing={2} mt={3}>
-                    {[...Array(3)]?.map((item,index) => (
-                        <Grid key = {index}  item xs={12} md={4} >
-                                <Skeleton variant='rectangular' width={'100%'} height={600} sx={{ mb: 2 }} />
-                            </Grid>
-                    ))}
-            </Grid>
-
-		
+			<Grid container spacing={2} mt={3}>
+				{[...Array(3)]?.map((item, index) => (
+					<Grid key={index} item xs={12} md={4}>
+						<Skeleton variant='rectangular' width={'100%'} height={600} sx={{ mb: 2 }} />
+					</Grid>
+				))}
+			</Grid>
 		</>
 	);
 };

@@ -12,15 +12,25 @@ export const setUserToken = userTokenData => {
 	localStorage.setItem('token', JSON.stringify(token));
 };
 
+export const getTokenDuration = () => {
+	const token = JSON.parse(localStorage.getItem('token'));
+	if (!token) {
+		return;
+	}
+	const expirationTime = token.tokenDetails.expirationTime;
+	const now = new Date();
+	const duration = expirationTime - now.getTime();
+	return duration;
+};
+
 export const getUserToken = () => {
 	const token = JSON.parse(localStorage.getItem('token'));
-
+	const duration = getTokenDuration();
 	if (!token) {
 		return null;
 	}
-	const expirationTime = token.tokenDetails.expirationTime;
 
-	if (expirationTime < 0) {
+	if (duration < 0) {
 		return 'EXPIRED';
 	}
 

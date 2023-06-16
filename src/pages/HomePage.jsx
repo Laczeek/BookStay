@@ -1,41 +1,32 @@
 import { Suspense } from 'react';
-import { json, useLoaderData, defer, Await } from 'react-router-dom';
+import { useLoaderData, defer, Await, json } from 'react-router-dom';
 
+import { getHotelsInLoader } from '../firebase/firebase';
 import HotelsListSkeleton from '../skeletons/HotelsListSkeleton';
+import SearchField from '../components/SearchField';
 import HotelsList from '../components/HotelsList';
 
 const HomePage = () => {
 	const data = useLoaderData();
 
 	return (
-		<Suspense fallback={<HotelsListSkeleton />}>
-			<Await resolve={data.hotels}>{resolvedHotels => <HotelsList hotels={resolvedHotels} />}</Await>
-		</Suspense>
+		<>
+			<SearchField />
+			<Suspense fallback={<HotelsListSkeleton />}>
+				<Await resolve={data.hotels}>{resolvedHotels => <HotelsList hotels={resolvedHotels} page={'home'} />}</Await>
+			</Suspense>
+		</>
 	);
 };
 
 export default HomePage;
 
-const fetchHotels = async () => {
+const fetchHotels = () => {
 	try {
-		const res = await fetch('https://bookstay-48264-default-rtdb.firebaseio.com/hotels.json');
-
-		if (!res.ok) {
-			throw json({ message: 'Hotel download failed...' }, { status: 500 });
-		}
-
-		const data = await res.json();
-
-		let hotels = [];
-
-		for (const key in data) {
-			const hotel = { id: key, ...data[key] };
-			hotels.push(hotel);
-		}
-
+		const hotels = getHotelsInLoader();
 		return hotels;
 	} catch (error) {
-		throw json({ message: 'Hotel download failed...' }, { status: 500 });
+		throw json({ message: 'Hotels download failed...' }, { status: 500 });
 	}
 };
 

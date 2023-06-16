@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Link, useRouteLoaderData, useNavigation, useSubmit } from 'react-router-dom';
+import { useRouteLoaderData, useNavigation, useSubmit, useNavigate } from 'react-router-dom';
+
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -16,6 +17,7 @@ const HotelDetails = props => {
 	const token = useRouteLoaderData('root');
 	const [chosenRoom, setChosenRoom] = useState(null);
 	const navigation = useNavigation();
+	const navigate = useNavigate();
 	const submit = useSubmit();
 	const isSubmitting = navigation.state === 'submitting';
 
@@ -30,16 +32,21 @@ const HotelDetails = props => {
 	const deleteHotelHandler = () => {
 		const proceded = window.confirm('Are you sure?');
 		if (proceded) {
-			submit({formId: 'deleteHotel' ,serialized: JSON.stringify(props.id) }, { method: 'DELETE' });
+			submit({ formId: 'deleteHotel', serialized: JSON.stringify(props.id) }, { method: 'DELETE' });
 		}
 	};
 
 	return (
 		<>
-			<ModalForm open={Boolean(chosenRoom)} onClose = {closeForm} modalWidth = {'400px'}>
-			<ReservationForm room = {chosenRoom} hotelInfo = {props} token = {token}/>
+			<ModalForm open={Boolean(chosenRoom)} onClose={closeForm} modalWidth={'400px'}>
+				<ReservationForm room={chosenRoom} hotelInfo={props} token={token} />
 			</ModalForm>
-			<Button variant='outlined' color='inherit' component={Link} to='/'>
+			<Button
+				variant='outlined'
+				color='inherit'
+				onClick={() => {
+					navigate(-1);
+				}}>
 				Go back
 			</Button>
 
@@ -56,9 +63,9 @@ const HotelDetails = props => {
 					</ImageListItem>
 
 					{props.rooms &&
-						props.rooms.map(room =>
+						props.rooms.map((room, index) =>
 							room.images && room.images[0] ? (
-								<ImageListItem key={room.name}>
+								<ImageListItem key={index}>
 									<img src={room.images[0]} loading='lazy' style={{ height: '100%' }} />
 								</ImageListItem>
 							) : null
@@ -117,10 +124,10 @@ const HotelDetails = props => {
 				</Box>
 
 				<Grid container spacing={2} mt={3}>
-					{props.rooms.map(room => {
+					{props.rooms.map((room, index) => {
 						return (
-							<Grid item xs={12} sm={6} md={4} key={room.name}>
-								<RoomCard room={room} onClick = {openFormForConcreteRoom}/>
+							<Grid item xs={12} sm={6} md={4} key={index}>
+								<RoomCard room={room} onClick={openFormForConcreteRoom} />
 							</Grid>
 						);
 					})}

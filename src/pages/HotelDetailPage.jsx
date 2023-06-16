@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { json, useLoaderData, defer, Await, redirect } from 'react-router-dom';
+import { json, useLoaderData, defer, Await, redirect, ScrollRestoration } from 'react-router-dom';
 
 import HotelDetailsSkeleton from '../skeletons/HotelDetailsSkeleton';
 import HotelDetails from '../components/HotelDetails';
@@ -10,9 +10,12 @@ const HotelDetailPage = () => {
 	const data = useLoaderData();
 
 	return (
-		<Suspense fallback={<HotelDetailsSkeleton />}>
-			<Await resolve={data.hotelDetails}>{resolvedDetails => <HotelDetails {...resolvedDetails} />}</Await>
-		</Suspense>
+		<>
+			<ScrollRestoration />
+			<Suspense fallback={<HotelDetailsSkeleton />}>
+				<Await resolve={data.hotelDetails}>{resolvedDetails => <HotelDetails {...resolvedDetails} />}</Await>
+			</Suspense>
+		</>
 	);
 };
 
@@ -20,7 +23,7 @@ export default HotelDetailPage;
 
 const fetchHotelDetails = async hotelId => {
 	try {
-		const res = await fetch(`https://bookstay-48264-default-rtdb.firebaseio.com/hotels/${hotelId}.json`);
+		const res = await fetch(`${import.meta.env.VITE_APP_DATABASE_URL}/hotels/${hotelId}.json`);
 
 		if (!res.ok) {
 			throw json({ message: 'Hotel data download failed...' }, { status: 500 });
@@ -52,7 +55,7 @@ export const action = async ({ request }) => {
 	try {
 		if (formId === 'deleteHotel') {
 			const res = await fetch(
-				`https://bookstay-48264-default-rtdb.firebaseio.com/hotels/${JSON.parse(data)}.json?auth=${token.accessToken}`,
+				`${import.meta.env.VITE_APP_DATABASE_URL}/hotels/${JSON.parse(data)}.json?auth=${token.accessToken}`,
 				{
 					method: request.method,
 					headers: {
@@ -66,16 +69,13 @@ export const action = async ({ request }) => {
 			}
 			return redirect('/my-hotels');
 		} else if (formId === 'reservation') {
-			const res = await fetch(
-				`https://bookstay-48264-default-rtdb.firebaseio.com/reservations.json?auth=${token.accessToken}`,
-				{
-					method: request.method,
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: data,
-				}
-			);
+			const res = await fetch(`${import.meta.env.VITE_APP_DATABASE_URL}/reservations.json?auth=${token.accessToken}`, {
+				method: request.method,
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: data,
+			});
 
 			if (!res.ok) {
 				throw json({ message: "Can't make reservation!!!" }, { status: 500 });

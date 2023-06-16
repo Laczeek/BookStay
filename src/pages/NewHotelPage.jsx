@@ -18,7 +18,7 @@ export const action = async ({ request }) => {
 
 	try {
 		const res = await fetch(
-			`https://bookstay-48264-default-rtdb.firebaseio.com/hotels.json?auth=${token.accessToken}`,
+			`${import.meta.env.VITE_APP_DATABASE_URL}/hotels.json?auth=${token.accessToken}`,
 			{
 				method: request.method,
 				headers: {

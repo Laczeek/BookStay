@@ -1,8 +1,7 @@
-import  CircularProgress  from "@mui/material/CircularProgress";
-
+import CircularProgress from '@mui/material/CircularProgress';
 
 const LoadingSpinner = () => {
-    return <CircularProgress size={80} sx={{position: 'absolute', left:'50%', top: '50%', transform: 'translate(-50%, -50%)'}}/>
-}
+	return <CircularProgress size={80} sx={{ display: 'block', margin: '0 auto', marginTop: '2em' }} />;
+};
 
 export default LoadingSpinner;
